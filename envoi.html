@@ -33,6 +33,8 @@
 
 	refreshOrders();
 
+	shiftClicksListener();
+
 	function addOrder(){
 		const order = { 
 			number: number.value,
@@ -44,7 +46,7 @@
 	}
 
 	function showOrder(order){
-		const orderHTML = `<div><span>${order.number}</span> - <span>${order.source}</span> - <span>${order.destination}</span> - <span>${order.status}</span></div>`;
+		const orderHTML = `<div class="orderDiv"><span>${order.number}</span> - <span>${order.source}</span> - <span>${order.destination}</span> - <span>${order.status}</span></div>`;
 		orders.insertAdjacentHTML('beforeend', orderHTML);
 	}
 	
@@ -90,6 +92,42 @@
 		showOrders(ordersObjs);
 	}
 	
+	function shiftClicksListener(){
+
+		orders.addEventListener("click", e => {
+			if(e.shiftKey){
+				if(e.target.nodeName == "SPAN")
+					changeStatus(e.target.parentNode);
+				else if(e.target.nodeName == "DIV")
+					changeStatus(e.target);
+			}
+		});
+	}
+
+	function changeStatus(orderDiv){
+		console.log(orderDiv);
+		const currentStatus = orderDiv.getElementsByTagName("span")[3].innerText;
+		const nextStatus = getNextStatus(currentStatus);
+		orderDiv.getElementsByTagName("span")[3].innerText = nextStatus;
+	}
+	
+	function getNextStatus(status){
+		switch(status){
+			case 'Enrégistré':
+				return 'Planifié';
+			break;
+			case 'Planifié':
+				return 'Envoyé';
+			break;
+			case 'Envoyé':
+				return 'Arrivé';
+			break;
+			case 'Arrivé':
+				return 'Enrégistré';
+			break;
+		}
+	}	
+	
 	function save(){
 		//Convert HTMLCollection to Array of balises
 		const ordersHTML = [...orders.children];
@@ -121,5 +159,6 @@
 		orders.innerHTML = "";
 		ordersObjs.forEach(order => showOrder(order));
 	}
+	
 	
 </script>
