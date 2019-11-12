@@ -16,7 +16,7 @@
 <input id="number" placeholder="Numéro" />
 <input id="source" placeholder="Origine" />
 <input id="destination" placeholder="Destination" />
-<button onclick="add()">Ajouter</button>
+<button onclick="addOrder()">Ajouter</button>
 <h3>Liste d'envoi</h3>
 <button>Trier par numéro</button>
 <button>Trier par statut</button>
@@ -24,13 +24,13 @@
 <button>Simulation</button>
 <button>Arrêter</button>
 <br/><br/>
-<button>Enregistrer</button>
+<button onclick="save()">Enregistrer</button>
 <br/><br/>
 <!-- div pour afficher les envois: -->
 <div id="orders"></div>
 
 <script>
-	function add(){
+	function addOrder(){
 		const order = { 
 			number: number.value,
 			source: source.value,
@@ -41,8 +41,28 @@
 	}
 
 	function showOrder(order){
-		const orderHTML = `<div>${order.number} - ${order.source} - ${order.destination} - ${order.status}</div>`;
+		const orderHTML = `<div><span>${order.number}</span> - <span>${order.source}</span> - <span>${order.destination}</span> - <span>${order.status}</span></div>`;
 		orders.insertAdjacentHTML('beforeend', orderHTML);
+	}
+	
+	function save(){
+		//Convert HTMLCollection to Array of balises
+		const ordersHTML = [...orders.children];
+		const ordersObjs = ordersHTML.map(orderHTML => {
+			return {
+				number: orderHTML.getElementsByTagName("span")[0].innerText,
+				source: orderHTML.getElementsByTagName("span")[1].innerText,
+				destination: orderHTML.getElementsByTagName("span")[2].innerText,
+				status: orderHTML.getElementsByTagName("span")[3].innerText,
+			};
+		});
+		
+		const ordersJSON = JSON.stringify(ordersObjs);
+		window.localStorage.setItem("orders", ordersJSON);
+	}
+	
+	function showOrders(){
+	
 	}
 	
 </script>
