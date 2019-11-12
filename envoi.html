@@ -35,12 +35,13 @@
 			number: number.value,
 			source: source.value,
 			destination: destination.value,
+			status: 'Enrégistré'
 		};
 		showOrder(order);
 	}
 
 	function showOrder(order){
-		const orderHTML = `<div>${order.number} - ${order.source} - ${order.destination}</div>`;
+		const orderHTML = `<div>${order.number} - ${order.source} - ${order.destination} - ${order.status}</div>`;
 		orders.insertAdjacentHTML('beforeend', orderHTML);
 	}
 	
