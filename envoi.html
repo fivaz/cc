@@ -30,6 +30,9 @@
 <div id="orders"></div>
 
 <script>
+
+	showOrders();
+
 	function addOrder(){
 		const order = { 
 			number: number.value,
@@ -62,7 +65,11 @@
 	}
 	
 	function showOrders(){
-	
+		//je fais cette validation pour eviter de essayer de parser une string vide
+		const ordersJSON = window.localStorage.getItem("orders") || "[]";
+		const ordersObjs = JSON.parse(ordersJSON);
+		orders.innerHTML = "";
+		ordersObjs.forEach(order => showOrder(order));
 	}
 	
 </script>
