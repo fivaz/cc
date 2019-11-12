@@ -6,15 +6,60 @@
     width: 50px;
   }
 </style>
-<canvas width="320" height="320"></canvas>
+<canvas id="canvas" onclick="drawMouse(event)" width="320" height="320"></canvas>
 <br/>
-<input type="text" placeholder="Ligne">
-<input type="text" placeholder="Colonne">
-<select>
+<input id="ligne" type="text" placeholder="Ligne">
+<input id="colonne" type="text" placeholder="Colonne">
+<select id="select">
   <option value="rgba(0, 0, 255, 0.8)">Bleu</option>
   <option value="rgba(245, 248, 55, 0.8)">Jaune</option>
   <option value="rgba(255, 0, 0, 0.8)">Rouge</option>
   <option value="rgba(0, 255, 0, 0.5)">Vert</option>
   <option value="rgba(255, 255, 255, 1)">Aucune couleur</option>
 </select>
-<button>Colorier</button>
+<button onclick="draw()">Colorier</button>
+	
+<script>
+	const ctx = canvas.getContext('2d');
+	
+	drawGrade();
+
+	function drawGrade(){
+		let x = 0;
+		let y = 0;
+		ctx.beginPath();
+		for (let x = 0; x < 8*40; x += 40){
+			for (let y = 0; y < 8*40; y += 40){
+				ctx.rect(x,y, 40, 40);
+			}
+		}
+	ctx.stroke();
+	}
+	
+	function dessierCarre(x1, y1, couleur){
+	
+		//just to clean
+		ctx.fillStyle = "white";
+		ctx.beginPath();
+		ctx.fillRect(x1*40,y1*40, 39, 39);
+		ctx.stroke();
+	
+		ctx.fillStyle = couleur;
+		ctx.beginPath();
+		ctx.fillRect(x1*40,y1*40, 39, 39);
+		ctx.stroke();
+		
+		drawGrade();
+	}
+	
+	function draw(){
+		dessierCarre(ligne.value, colonne.value, select.value);
+	}
+	
+	function drawMouse(event){
+		const ligne1 = Math.floor(event.clientX/40);
+		const colonne1 = Math.floor(event.clientY/40);
+		dessierCarre(ligne1, colonne1, select.value);
+	}	
+	
+</script>

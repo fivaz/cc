@@ -21,8 +21,8 @@
 <button onclick="sortByNumber()">Trier par numéro</button>
 <button onclick="sortByStatus()">Trier par statut</button>
 <br/><br/>
-<button>Simulation</button>
-<button>Arrêter</button>
+<button onclick="simulation()">Simulation</button>
+<button onclick="arreter()">Arrêter</button>
 <br/><br/>
 <button onclick="save()">Enregistrer</button>
 <br/><br/>
@@ -30,6 +30,8 @@
 <div id="orders"></div>
 
 <script>
+
+	let timer;
 
 	refreshOrders();
 
@@ -159,6 +161,17 @@
 		orders.innerHTML = "";
 		ordersObjs.forEach(order => showOrder(order));
 	}
+
+	function simulation(){
+		clearTimeout(timer);
+		timer = setInterval(_=>{
+			let index = Math.floor(Math.random()*orders.children.length);
+			changeStatus(orders.children[index]);
+		}, 500);
+	}
 	
-	
+	function arreter(){
+		clearTimeout(timer);
+	}
+
 </script>
