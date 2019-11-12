@@ -18,8 +18,8 @@
 <input id="destination" placeholder="Destination" />
 <button onclick="addOrder()">Ajouter</button>
 <h3>Liste d'envoi</h3>
-<button>Trier par numéro</button>
-<button>Trier par statut</button>
+<button onclick="sortByNumber()">Trier par numéro</button>
+<button onclick="sortByStatus()">Trier par statut</button>
 <br/><br/>
 <button>Simulation</button>
 <button>Arrêter</button>
@@ -31,7 +31,7 @@
 
 <script>
 
-	showOrders();
+	refreshOrders();
 
 	function addOrder(){
 		const order = { 
@@ -46,6 +46,48 @@
 	function showOrder(order){
 		const orderHTML = `<div><span>${order.number}</span> - <span>${order.source}</span> - <span>${order.destination}</span> - <span>${order.status}</span></div>`;
 		orders.insertAdjacentHTML('beforeend', orderHTML);
+	}
+	
+	function sortByNumber(){
+		const ordersObjs = getOrders();
+		ordersObjs.sort((orderA, orderB) => {
+			if(orderA.number > orderB.number)
+				return 1;
+			if(orderA.number < orderB.number)
+				return -1;
+			return 0;
+		});
+		showOrders(ordersObjs);
+	}
+	
+	function getStatusNumber(status){
+		switch(status){
+			case 'Enrégistré':
+				return 0;
+			break;
+			case 'Planifié':
+				return 1;
+			break;
+			case 'Envoyé':
+				return 2;
+			break;
+			case 'Arrivé':
+				return 3;
+			break;
+		}
+	}
+	
+	function sortByStatus(){
+		
+		const ordersObjs = getOrders();
+		ordersObjs.sort((orderA, orderB) => {
+			if(getStatusNumber(orderA.status) > getStatusNumber(orderB.status))
+				return 1;
+			if(getStatusNumber(orderA.status) < getStatusNumber(orderB.status))
+				return -1;
+			return 0;
+		});
+		showOrders(ordersObjs);
 	}
 	
 	function save(){
@@ -64,10 +106,18 @@
 		window.localStorage.setItem("orders", ordersJSON);
 	}
 	
-	function showOrders(){
+	function getOrders(){
 		//je fais cette validation pour eviter de essayer de parser une string vide
 		const ordersJSON = window.localStorage.getItem("orders") || "[]";
-		const ordersObjs = JSON.parse(ordersJSON);
+		return JSON.parse(ordersJSON);
+	}
+	
+	function refreshOrders(){
+		const ordersObjs = getOrders();
+		showOrders(ordersObjs);
+	}
+		
+	function showOrders(ordersObjs){
 		orders.innerHTML = "";
 		ordersObjs.forEach(order => showOrder(order));
 	}
