@@ -13,10 +13,10 @@
 </style>
 <h2>Suivi d'envois</h2>
 <br/>
-<input placeholder="Numéro" />
-<input placeholder="Origine" />
-<input placeholder="Destination" />
-<button>Ajouter</button>
+<input id="number" placeholder="Numéro" />
+<input id="source" placeholder="Origine" />
+<input id="destination" placeholder="Destination" />
+<button onclick="add()">Ajouter</button>
 <h3>Liste d'envoi</h3>
 <button>Trier par numéro</button>
 <button>Trier par statut</button>
@@ -27,4 +27,21 @@
 <button>Enregistrer</button>
 <br/><br/>
 <!-- div pour afficher les envois: -->
-<div></div>
+<div id="orders"></div>
+
+<script>
+	function add(){
+		const order = { 
+			number: number.value,
+			source: source.value,
+			destination: destination.value,
+		};
+		showOrder(order);
+	}
+
+	function showOrder(order){
+		const orderHTML = `<div>${order.number} - ${order.source} - ${order.destination}</div>`;
+		orders.insertAdjacentHTML('beforeend', orderHTML);
+	}
+	
+</script>
